@@ -1,0 +1,17 @@
+<!--pages/studio/studio.wxml-->
+<view class = "text-area">
+  <text>{{text.content}}</text>
+</view>
+<button wx:if="{{recording}}" class="button-stop" size='mini' type='warn' bindtap='stoprecordtap'>停止</button>
+<button wx:else class="button-record" size='mini' type='primary' bindtap='recordtap'>录音</button>
+<view class="time-area">
+  <text> {{view.durstring}} s</text>
+</view>
+<view class="filesize">
+  <text>{{record.size}}MB</text>
+</view>
+<view class='voice-area'>
+  <button size='mini' type='primary' bindtap='playvoice'>播放</button>
+  <button size='mini' type='warn' bindtap='stopvoice'>停止</button>
+  <button size='mini' type='primary' bindtap='uploadvoice'>上传</button>
+</view>
