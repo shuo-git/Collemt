@@ -7,6 +7,9 @@
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
   </view>
+  <button size='mini' type='primary' bindtap='onSignup'>注册</button>
+  <button size='mini' type='primary' bindtap='onModify'>修改</button>
+  <button size='mini' type='primary' bindtap='onFetch'>领取任务</button>
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>

@@ -6,6 +6,7 @@ const app = getApp()
 Page({
   data: {
     motto: 'Hello World',
+    myopenid: '',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
@@ -17,6 +18,17 @@ Page({
     })
   },
   onLoad: function () {
+    if (wx.getStorageSync('MyOpenid').openid){
+      this.setData({
+        myopenid: wx.getStorageSync('MyOpenid').openid
+      })
+    }else{
+      app.openidCallback = res => {
+        this.setData({
+          myopenid: res.openid
+        })
+      }
+    }
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -51,5 +63,65 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+  },
+  onSignup: function() {
+    // console.log(wx.getStorageSync('MyOpenid'));
+    wx.request({
+      url: 'https://' + app.config.host + '/onSignup',
+      method: 'GET',
+      data: {
+        openid: this.data.myopenid,
+        gender: 'strange',
+        address: 'Zhejiang-Hanzhou',
+        phonenumber: '0'
+      },
+      success: function(res) {
+        if(!res.data.stat){
+          wx.setStorageSync('MyOpenid', res.data);
+          console.log(res.data);
+        }else{
+          console.log(res.data);
+        }
+      }
+    })
+  },
+  onModify: function() {
+    wx.request({
+      url: 'https://' + app.config.host + '/onModify',
+      method: 'GET',
+      data: {
+        openid: this.data.myopenid,
+        gender: 'Male',
+        address: 'Heibei-Cangzhou',
+      },
+      success: function (res) {
+        console.log(res.data);
+        if(res.data.stat > 0){
+          var data = wx.getStorageSync('MyOpenid');
+          data.gender = 'Male';
+          data.address = 'Heibei-Cangzhou';
+          wx.setStorageSync('MyOpenid', data);
+          console.log(wx.getStorageSync('MyOpenid'));
+        }
+      }
+    })
+  },
+  onFetch: function() {
+    wx.request({
+      url: 'https://' + app.config.host + '/onFetch',
+      method: 'GET',
+      data: {
+        openid: this.data.myopenid
+      },
+      success: function(res) {
+        console.log(res.data);
+        if(res.data.stat > 0){
+          var data = wx.getStorageSync('MyOpenid');
+          data.cur_pkg = res.data.pkgid;
+          wx.setStorageSync('MyOpenid', data);
+          console.log(wx.getStorageSync('MyOpenid'));
+        }
+      }
+    })  
   }
 })

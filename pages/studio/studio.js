@@ -196,17 +196,25 @@ Page({
   },
 
   uploadvoice: function () {
-    wx.uploadFile({
-      url: 'https://60755112.collemt.club/file_upload',
-      filePath: this.data.record.savedpath,
-      name: 'voices',
-      formData:{
-        'user':'wangshuo',
-        'id': '001'
-      },
-      success:function(res){
-        console.log(res.statusCode);
+    wx.getStorage({
+      key: 'MyOpenid',
+      success: res => {
+        console.log(res.data);
+        wx.uploadFile({
+          url: 'https://60755112.collemt.club/file_upload',
+          filePath: this.data.record.savedpath,
+          name: 'voices',
+          formData: {
+            pkgid: res.data.cur_pkg.toString(),
+            line: '0',
+            openid: res.data.openid,
+            total: '1'
+          },
+          success: function (res2) {
+            console.log(res2.data);
+          }
+        });
       }
-    })
+    });
   }
 })
