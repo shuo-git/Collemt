@@ -66,45 +66,57 @@ Page({
   },
   onSignup: function() {
     // console.log(wx.getStorageSync('MyOpenid'));
-    wx.request({
-      url: 'https://' + app.config.host + '/onSignup',
-      method: 'GET',
-      data: {
-        openid: this.data.myopenid,
-        gender: 'strange',
-        address: 'Zhejiang-Hanzhou',
-        phonenumber: '0'
-      },
+    wx.getStorage({
+      key: 'MyOpenid',
       success: function(res) {
-        if(!res.data.stat){
-          wx.setStorageSync('MyOpenid', res.data);
-          console.log(res.data);
-        }else{
-          console.log(res.data);
-        }
-      }
+        wx.request({
+          url: 'https://' + app.config.host + '/onSignup',
+          method: 'GET',
+          data: {
+            openid: res.data.openid,
+            gender: 'strange',
+            address: 'Zhejiang-Hanzhou',
+            phonenumber: '0'
+          },
+          success: function (res2) {
+            if (!res2.data.stat) {
+              wx.setStorageSync('MyOpenid', res2.data);
+              console.log(res2.data);
+            } else {
+              console.log(res2.data);
+            }
+          }
+        })
+      },
     })
+    
   },
   onModify: function() {
-    wx.request({
-      url: 'https://' + app.config.host + '/onModify',
-      method: 'GET',
-      data: {
-        openid: this.data.myopenid,
-        gender: 'Male',
-        address: 'Heibei-Cangzhou',
+    wx.getStorage({
+      key: 'MyOpenid',
+      success: function(res) {
+        wx.request({
+          url: 'https://' + app.config.host + '/onModify',
+          method: 'GET',
+          data: {
+            openid: res.data.openid,
+            gender: 'Male',
+            address: 'Heibei-Cangzhou',
+          },
+          success: function (res2) {
+            console.log(res2.data);
+            if (res2.data.stat > 0) {
+              var data = wx.getStorageSync('MyOpenid');
+              data.gender = 'Male';
+              data.address = 'Heibei-Cangzhou';
+              wx.setStorageSync('MyOpenid', data);
+              console.log(wx.getStorageSync('MyOpenid'));
+            }
+          }
+        })
       },
-      success: function (res) {
-        console.log(res.data);
-        if(res.data.stat > 0){
-          var data = wx.getStorageSync('MyOpenid');
-          data.gender = 'Male';
-          data.address = 'Heibei-Cangzhou';
-          wx.setStorageSync('MyOpenid', data);
-          console.log(wx.getStorageSync('MyOpenid'));
-        }
-      }
     })
+    
   },
   onFetch: function() {
     wx.request({
