@@ -208,7 +208,7 @@ Page({
             pkgid: res.data.cur_pkg.toString(),
             line: '0',
             openid: res.data.openid,
-            total: '1'
+            total: '1'//Str形式,'0'表示后面还有包，'1'表示后面没有包了
           },
           success: function (res2) {
             console.log(res2.data);

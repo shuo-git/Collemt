@@ -135,5 +135,22 @@ Page({
         }
       }
     })  
+  },
+  onGetinfo: function() {
+    wx.getStorage({
+      key: 'MyOpenid',
+      success: function(res) {
+        wx.request({
+          url: 'https://' + app.config.host + '/onGetinfo',
+          method: 'GET',
+          data: {
+            openid: res.data.openid
+          },
+          success: function(res2) {
+            console.log(res2.data);
+          }
+        })
+      },
+    })
   }
 })
